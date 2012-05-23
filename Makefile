@@ -32,7 +32,7 @@ download-contrib: chashmap fixedarraylist
 main.c:
 	sh make-tests.sh > main.c
 
-tests: main.c component.c component_context.c component_manager.c component_type.c test_component.c CuTest.c chashmap_via_linked_list/linked_list_hashmap.c ccircularbuffer/cbuffer.c
+tests: main.c component.c component_context.c component_manager.c component_type.c test_component.c CuTest.c chashmap_via_linked_list/linked_list_hashmap.c ccircularbuffer/cbuffer.c component_messenger.c
 	$(CC) -g -Ichashmap_via_linked_list -Iccircularbuffer -o $@ $^
 	./tests
 

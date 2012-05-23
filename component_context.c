@@ -22,6 +22,7 @@ typedef struct
     hashmap_t *ctypes;
     hashmap_t *ctypes_by_name;
 
+    void *universe;
 } _ctx_t;
 
 /*----------------------------------------------------------------------------*/
@@ -88,6 +89,13 @@ int component_ctx_get_component_typeid_from_name(void *ctx, const char *name)
 }
 
 /*----------------------------------------------- Functions run on components */
+void component_ctx_set_universe(void *ctx, void *universe)
+{
+    _ctx_t *c = ctx;
+
+    c->universe = universe;
+}
+
 void component_ctx_set_func_release_data(void *ctx,
                                          component_func_release_data func)
 {
@@ -103,20 +111,6 @@ void component_ctx_set_func_event(void *ctx, component_func_event func)
     c->event_func = func;
 }
 
-void component_ctx_set_func_init(void *ctx, component_func_init func)
-{
-    _ctx_t *c = ctx;
-
-    c->init_func = func;
-}
-
-void component_ctx_set_func_release(void *ctx, component_func_release func)
-{
-    _ctx_t *c = ctx;
-
-    c->release_func = func;
-}
-
 void component_ctx_run_data_release(void *ctx, const int type, void *data)
 {
     _ctx_t *c = ctx;
@@ -130,23 +124,8 @@ void component_ctx_run_event(void *ctx, const int event, void *comp,
 {
     _ctx_t *c = ctx;
 
-    c->event_func(event, comp, subject, data);
-}
-
-void component_ctx_run_init(void *ctx, void *comp, void *subject)
-{
-    _ctx_t *c = ctx;
-
-    if (c->init_func)
-        c->init_func(comp, subject);
-}
-
-void component_ctx_run_release(void *ctx, void *comp, void *subject)
-{
-    _ctx_t *c = ctx;
-
-    if (c->release_func)
-        c->release_func(comp, subject);
+    if (c->event_func)
+        c->event_func(c->universe, event, comp, subject, data);
 }
 
 /*----------------------------------------------------------------------------*/

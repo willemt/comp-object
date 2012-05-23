@@ -46,6 +46,13 @@ void *component_new(const int type)
     return c;
 }
 
+long component_get_type(void *comp)
+{
+    _component_t *c = comp;
+
+    return c->comp.type;
+}
+
 void component_free(void *comp)
 {
     _component_t *c = comp;

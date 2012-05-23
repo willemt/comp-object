@@ -1,15 +1,16 @@
 
+#define COMPONENT_MSG_INIT 0
+#define COMPONENT_MSG_RELEASE 1
+
 typedef struct
 {
     void *in;
     int type;
 } component_t;
 
-//typedef int (*component_run_func) (void *func, const int nargs, ...);
-
 typedef int (*component_func_release_data) (int event, void *data);
-typedef int (*component_func_event) (int event, void *comp, void *subject,
-                                     void *data);
+typedef int (*component_func_event) (void *universe, int event, void *comp,
+                                     void *subject, void *data);
 typedef int (*component_func_init) (void *comp, void *subject);
 typedef int (*component_func_release) (void *comp, void *subject);
 
@@ -17,6 +18,8 @@ typedef int (*component_func_release) (void *comp, void *subject);
 unsigned long component_hash(const void *a);
 
 long component_cmp(const void *a, const void *b);
+
+long component_get_type(void *comp);
 
 void *component_new(const int type);
 
@@ -30,6 +33,8 @@ void component_ctx_free(void *ctx);
 void *component_ctx_get_component_type_from_typeid(void *ctx, const long type);
 
 int component_ctx_get_component_typeid_from_name(void *ctx, const char *name);
+
+void component_ctx_set_universe(void *ctx, void *universe);
 
 void component_ctx_set_func_event(void *ctx, component_func_event func);
 

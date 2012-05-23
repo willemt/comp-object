@@ -141,7 +141,8 @@ void *component_manager_add_component(void *cm, const long typeid)
 
         comp = component_new(typeid);
         hashmap_put(self->components, (void *) typeid, comp);
-        component_ctx_run_init(self->ctx, comp, self->subject);
+        component_ctx_run_event(self->ctx, COMPONENT_MSG_INIT, comp,
+                                self->subject, NULL);
         return comp;
     }
 }
@@ -157,7 +158,8 @@ void component_manager_remove_component(void *cm, const long typeid)
 
     if (comp)
     {
-        component_ctx_run_release(self->ctx, comp, self->subject);
+        component_ctx_run_event(self->ctx, COMPONENT_MSG_RELEASE, comp,
+                                self->subject, NULL);
         component_free(comp);
     }
 }
@@ -239,11 +241,14 @@ int component_manager_process_events(void *cm)
 #if 0
     while ((ev = llqueue_poll(cm->event_queue)))
 #else
+
     while ((ev = (void *) cbuf_poll(self->event_queue, sizeof(event_t))))
 #endif
     {
         int *id;
         hashmap_iterator_t iter;
+
+        printf("polling event\n");
 
         hashmap_iterator(self->components, &iter);
 
@@ -253,6 +258,7 @@ int component_manager_process_events(void *cm)
             void *comp;
 
             comp = hashmap_get(self->components, (void *) id);
+            printf("running event, ev->type: %d\n", ev->type);
             component_ctx_run_event(self->ctx, ev->type, comp, self->subject,
                                     ev->data);
         }
