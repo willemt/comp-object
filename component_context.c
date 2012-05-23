@@ -19,6 +19,7 @@ typedef struct
     component_func_init init_func;
     component_func_release release_func;
 
+    /*  a map of all the component types */
     hashmap_t *ctypes;
     hashmap_t *ctypes_by_name;
 
@@ -69,7 +70,6 @@ void *component_ctx_new()
 
     ctx = calloc(1, sizeof(_ctx_t));
     ctx->ctypes = hashmap_new(__ulong_hash, __ulong_compare);
-
     return ctx;
 }
 
@@ -83,8 +83,14 @@ void *component_ctx_get_component_type_from_typeid(void *ctx, const long type)
     return NULL;
 }
 
+/**
+ * get the id of this type fro the name
+ * @return -1 on error, type id otherwise
+ */
 int component_ctx_get_component_typeid_from_name(void *ctx, const char *name)
 {
+    /*  stub */
+    assert(0);
     return 0;
 }
 
@@ -138,10 +144,8 @@ void *component_ctx_type_new(void *c, const char *name, const long typeid)
 {
     _ctx_t *ctx = c;
 
-
     assert(name);
     assert(0 < typeid);
-
 
     /*  don't add same component type again */
     if (hashmap_get(ctx->ctypes, (void *) typeid))
@@ -157,15 +161,4 @@ void *component_ctx_type_new(void *c, const char *name, const long typeid)
         hashmap_put(ctx->ctypes, (void *) typeid, ct);
         return ct;
     }
-}
-
-/*----------------------------------------------------------------------------*/
-
-/**
- * get the id of this type fro the name
- * @return -1 on error, type id otherwise
- */
-int component_ctx_get_component_type_id_from_name(const char *name)
-{
-    return 0;
 }

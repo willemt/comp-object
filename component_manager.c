@@ -104,7 +104,6 @@ void *component_manager_new(void *ctx, void *subject)
     component_manager_t *cm;
 
     cm = calloc(1, sizeof(component_manager_t));
-//    cm->components = hashmap_new(component_hash, component_cmp);
     cm->components = hashmap_new(__ulong_hash, __ulong_compare);
     cm->ctx = ctx;
     cm->subject = subject;
@@ -247,8 +246,6 @@ int component_manager_process_events(void *cm)
     {
         int *id;
         hashmap_iterator_t iter;
-
-        printf("polling event\n");
 
         hashmap_iterator(self->components, &iter);
 
