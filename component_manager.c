@@ -1,7 +1,7 @@
 
 #include "component.h"
 #include "linked_list_hashmap.h"
-#include "cbuffer.h"
+//#include "cbuffer.h"
 //#include "linked_list_queue.h"
 #include <stdlib.h>
 #include <assert.h>
@@ -104,7 +104,7 @@ void *component_manager_new(void *ctx, void *subject)
     component_manager_t *cm;
 
     cm = calloc(1, sizeof(component_manager_t));
-    cm->components = hashmap_new(__ulong_hash, __ulong_compare);
+    cm->components = hashmap_new(__ulong_hash, __ulong_compare,11);
     cm->ctx = ctx;
     cm->subject = subject;
 //    cm->event_queue = llqueue_new();
@@ -210,7 +210,6 @@ int component_manager_get_num_components(void *cm)
 
 int component_manager_offer_event(void *cm, const long type, void *data)
 {
-    int *id;
     component_manager_t *self = cm;
 
 #if 0
@@ -255,13 +254,13 @@ int component_manager_process_events(void *cm)
             void *comp;
 
             comp = hashmap_get(self->components, (void *) id);
-            printf("running event, ev->type: %d\n", ev->type);
+            //printf("running event, ev->type: %d\n", ev->type);
             component_ctx_run_event(self->ctx, ev->type, comp, self->subject,
                                     ev->data);
         }
 
         /* release data if possible */
-        component_ctx_run_data_release(self->ctx, ev->type, ev->data);
+        //component_ctx_run_data_release(self->ctx, ev->type, ev->data);
     }
 
     return 1;

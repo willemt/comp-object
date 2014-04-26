@@ -28,14 +28,17 @@ typedef struct
 
 /*----------------------------------------------------------------------------*/
 
+#if 0
 static unsigned long __string_hash(const void *e1)
 {
     const unsigned char *str = e1;
     unsigned long hash = 0;
     int c;
 
-    while (c = *str++)
+    while ((c = *str++))
+    {
         hash = c + (hash << 6) + (hash << 16) - hash;
+    }
 
     return hash;
 
@@ -46,6 +49,7 @@ static long __string_compare(const void *e1, const void *e2)
 
     return strcmp(e1, e2);
 }
+#endif
 
 static unsigned long __ulong_hash(const void *e1)
 {
@@ -69,7 +73,7 @@ void *component_ctx_new()
     _ctx_t *ctx;
 
     ctx = calloc(1, sizeof(_ctx_t));
-    ctx->ctypes = hashmap_new(__ulong_hash, __ulong_compare);
+    ctx->ctypes = hashmap_new(__ulong_hash, __ulong_compare, 11);
     return ctx;
 }
 
@@ -78,21 +82,23 @@ void component_ctx_free(void *ctx)
     free(ctx);
 }
 
+#if 0
 void *component_ctx_get_component_type_from_typeid(void *ctx, const long type)
 {
     return NULL;
 }
+#endif
 
 /**
  * get the id of this type fro the name
  * @return -1 on error, type id otherwise
  */
+#if 0
 int component_ctx_get_component_typeid_from_name(void *ctx, const char *name)
 {
-    /*  stub */
-    assert(0);
     return 0;
 }
+#endif
 
 /*----------------------------------------------- Functions run on components */
 void component_ctx_set_universe(void *ctx, void *universe)
